@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "55796851871",
+    "firebase_url": "https://nfcnoticeboard.firebaseio.com",
+    "project_id": "nfcnoticeboard",
+    "storage_bucket": "nfcnoticeboard.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55796851871:android:684d7fdb4fb88268",
+        "android_client_info": {
+          "package_name": "com.miniproject.nfcnoticeboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55796851871-cinld37rgpgtnj720c5heq04u50btuqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.miniproject.nfcnoticeboard",
+            "certificate_hash": "3c8c2c6f42cab64271bee471f89ac59ea11561c7"
+          }
+        },
+        {
+          "client_id": "55796851871-p8grvh36n9ppi20b06auifpjaraibned.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8Dz8u349L2tr7pDB_jw98k9A64KZqbzg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55796851871-p8grvh36n9ppi20b06auifpjaraibned.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

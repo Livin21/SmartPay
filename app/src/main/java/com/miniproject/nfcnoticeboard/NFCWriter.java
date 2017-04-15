@@ -43,16 +43,8 @@ public class NFCWriter extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcwriter);
 
-
-
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         int NoticeID=pref.getInt("NoticeID", 0);
-
-
-
-
-
-
 
         TextView textView= (TextView) findViewById(R.id.value);
         textView.setText(valueOf(NoticeID));

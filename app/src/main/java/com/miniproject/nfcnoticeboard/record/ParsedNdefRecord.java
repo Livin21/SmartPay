@@ -1,8 +1,5 @@
 package com.miniproject.nfcnoticeboard.record;
 
-/**
- * Created by ACJLionsRoar on 20/03/17.
- */
 
 import android.app.Activity;
 import android.view.LayoutInflater;
