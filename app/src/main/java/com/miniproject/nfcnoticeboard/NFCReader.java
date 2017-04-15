@@ -28,6 +28,7 @@ package com.miniproject.nfcnoticeboard;
         import android.os.Parcel;
         import android.os.Parcelable;
         import android.provider.Settings;
+        import android.support.v7.app.AppCompatActivity;
         import android.view.LayoutInflater;
         import android.view.Menu;
         import android.view.MenuItem;
@@ -39,7 +40,7 @@ package com.miniproject.nfcnoticeboard;
 /**
  * An {@link Activity} which handles a broadcast of a new tag that the device just discovered.
  */
-public class NFCReader extends Activity {
+public class NFCReader extends AppCompatActivity {
 
     private static final DateFormat TIME_FORMAT = SimpleDateFormat.getDateTimeInstance();
     private LinearLayout mTagContent;
@@ -56,6 +57,7 @@ public class NFCReader extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcreader);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTagContent = (LinearLayout) findViewById(R.id.list);
         resolveIntent(getIntent());
 
@@ -411,8 +413,19 @@ public class NFCReader extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+
         if (mTags.size() == 0) {
-            Toast.makeText(this, R.string.nothing_scanned, Toast.LENGTH_LONG).show();
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    // app icon in action bar clicked; go home
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    return true;
+                default:
+                    Toast.makeText(this, R.string.nothing_scanned, Toast.LENGTH_LONG).show();;
+            }
+
             return true;
         }
 
@@ -431,6 +444,12 @@ public class NFCReader extends Activity {
                 return true;
             case R.id.menu_copy_reversed_dec:
                 copyIds(getIdsReversedDec());
+                return true;
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

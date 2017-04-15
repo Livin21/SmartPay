@@ -19,6 +19,7 @@
         android:text="NFC Writer Module"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:onClick="callWriter"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         />
 
     <Button
@@ -27,6 +28,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="NFC Reader Module"
-        android:onClick="callReader"/>
+        android:onClick="callReader"
+        android:theme="@style/ThemeOverlay.MyDarkButton"
+        />
+
+    <!--<Button-->
+        <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
+        <!--android:id="@+id/testAuth"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="test Auth"-->
+        <!--android:onClick="testAuth"/>-->
 
 </LinearLayout>
