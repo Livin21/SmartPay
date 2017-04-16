@@ -32,12 +32,12 @@
         android:theme="@style/ThemeOverlay.MyDarkButton"
         />
 
-    <!--<Button-->
-        <!--android:layout_marginTop="@dimen/activity_vertical_margin"-->
-        <!--android:id="@+id/testAuth"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="test Auth"-->
-        <!--android:onClick="testAuth"/>-->
+    <Button
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:id="@+id/testAuth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test Auth"
+        android:onClick="testAuth"/>
 
 </LinearLayout>

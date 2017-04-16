@@ -29,10 +29,12 @@ package com.miniproject.nfcnoticeboard;
         import android.os.Parcelable;
         import android.provider.Settings;
         import android.support.v7.app.AppCompatActivity;
+        import android.view.Gravity;
         import android.view.LayoutInflater;
         import android.view.Menu;
         import android.view.MenuItem;
         import android.view.View;
+        import android.widget.Button;
         import android.widget.LinearLayout;
         import android.widget.TextView;
         import android.widget.Toast;
@@ -389,18 +391,34 @@ public class NFCReader extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         LinearLayout content = mTagContent;
 
+        LinearLayout row = new LinearLayout(this);
+        row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
         // Parse the first message in the list
         // Build views for all of the sub records
         Date now = new Date();
         List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
         final int size = records.size();
         for (int i = 0; i < size; i++) {
+           // Button btnTag = new Button(this);
+//            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)btnTag.getLayoutParams();
+//            params.width=LinearLayout.LayoutParams.WRAP_CONTENT;
+//            params.height=LinearLayout.LayoutParams.WRAP_CONTENT;
+//            params.gravity= Gravity.END;
+//            btnTag.setLayoutParams(params);
+
+         //   String msg;
             TextView timeView = new TextView(this);
             timeView.setText(TIME_FORMAT.format(now));
             content.addView(timeView, 0);
             ParsedNdefRecord record = records.get(i);
+          //  btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+          //  msg="Download Notice"+record.getView(this, inflater, content, i);
+          //  btnTag.setText(msg);
             content.addView(record.getView(this, inflater, content, i), 1 + i);
+           // content.addView(btnTag,2+i);
             content.addView(inflater.inflate(R.layout.tag_divider, content, false), 2 + i);
+
         }
     }
 

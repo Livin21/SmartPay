@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_main_clear"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/menu_main_clear_title" />
     <item
         android:id="@+id/menu_main_copy"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/menu_main_copy">
         <menu>
             <item
@@ -23,4 +24,8 @@
                 android:title="@string/menu_copy_reversed_dec" />
         </menu>
     </item>
+
+    <item android:id="@+id/action_logout"
+        android:title="@string/log_out"
+        app:showAsAction="never" />
 </menu>

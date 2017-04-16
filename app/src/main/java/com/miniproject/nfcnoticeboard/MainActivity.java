@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-//    public void testAuth(View view) {
-//        Intent intent=new Intent(this,Authentication.class);
-//        this.startActivity(intent);
-//    }
+    public void testAuth(View view) {
+        Intent intent=new Intent(this,Main2Activity.class);
+        this.startActivity(intent);
+    }
 
 
     @Override

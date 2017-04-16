@@ -23,6 +23,51 @@
         android:layout_height="wrap_content"
         android:text="loading" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        >
+
+
+        <RadioButton
+            android:checked="true"
+            android:layout_weight="1"
+            android:id="@+id/textRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text Only"
+            android:onClick="textRadioUI"
+            />
+
+        <RadioButton
+            android:layout_weight="1"
+            android:id="@+id/fileRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add File"
+            android:onClick="fileRadioUI"
+            />
+
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/noticeDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Notice Details"
+        />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/uploadFileBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload File"/>
+
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"

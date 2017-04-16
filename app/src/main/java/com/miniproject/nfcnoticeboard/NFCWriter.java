@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -261,5 +262,45 @@ public class NFCWriter extends AppCompatActivity {
             mAdapter.disableForegroundDispatch(this);
             mAdapter.disableForegroundNdefPush(this);
         }
+    }
+
+    public void radioUpdateUI(View view) {
+        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
+        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
+        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+
+        if(textRadio.isChecked())
+        {
+            uploadBTN.setVisibility(View.GONE);
+            fileRadio.setChecked(false);
+        }
+
+        else if (fileRadio.isChecked())
+        {
+            uploadBTN.setVisibility(View.VISIBLE);
+            textRadio.setChecked(false);
+        }
+
+
+    }
+
+    public void textRadioUI(View view) {
+
+        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
+        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
+        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+
+        uploadBTN.setVisibility(View.GONE);
+        fileRadio.setChecked(false);
+    }
+
+    public void fileRadioUI(View view) {
+        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
+        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
+        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+
+        uploadBTN.setVisibility(View.VISIBLE);
+        textRadio.setChecked(false);
+
     }
 }

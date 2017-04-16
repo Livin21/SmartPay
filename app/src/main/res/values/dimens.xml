@@ -9,4 +9,8 @@
     <dimen name="title_bottom_margin">16dp</dimen>
     <dimen name="field_width_standard">160dp</dimen>
 
+    <dimen name="standard_field_width">160dp</dimen>
+    <dimen name="margin_1">8dp</dimen>
+    <dimen name="margin_2">16dp</dimen>
+
 </resources>
