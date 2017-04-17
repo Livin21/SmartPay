@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 public class NdefMessageParser {
 
+    public static String stringValue;
+
     // Utility class
     private NdefMessageParser() {
 
@@ -44,6 +46,7 @@ public class NdefMessageParser {
                     public View getView(Activity activity, LayoutInflater inflater, ViewGroup parent, int offset) {
                         TextView text = (TextView) inflater.inflate(R.layout.tag_text, parent, false);
                         text.setText(new String(record.getPayload()));
+                        stringValue=text.getText().toString();
                         return text;
                     }
 

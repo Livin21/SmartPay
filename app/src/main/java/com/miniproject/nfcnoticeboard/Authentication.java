@@ -257,11 +257,5 @@ public class Authentication extends AppCompatActivity implements
         Intent intent=new Intent(this,MainActivity.class);
         this.startActivity(intent);
     }
-//
-//    void showProgressDialog()
-//    {
-//        ProgressDialog pd = new ProgressDialog(Authentication.this);
-//        pd.setMessage("loading");
-//        pd.show();
-//    }
+
 }

@@ -16,6 +16,8 @@ package com.miniproject.nfcnoticeboard;
         import com.google.firebase.storage.FirebaseStorage;
         import com.google.firebase.storage.StorageReference;
         import com.miniproject.nfcnoticeboard.record.ParsedNdefRecord;
+        import com.miniproject.nfcnoticeboard.record.TextRecord;
+
         import android.app.Activity;
         import android.app.AlertDialog;
         import android.app.PendingIntent;
@@ -25,6 +27,7 @@ package com.miniproject.nfcnoticeboard;
         import android.content.Intent;
         import android.graphics.Bitmap;
         import android.graphics.BitmapFactory;
+        import android.net.Uri;
         import android.nfc.NdefMessage;
         import android.nfc.NdefRecord;
         import android.nfc.NfcAdapter;
@@ -33,6 +36,7 @@ package com.miniproject.nfcnoticeboard;
         import android.nfc.tech.MifareUltralight;
         import android.nfc.tech.NfcA;
         import android.os.Bundle;
+        import android.os.Environment;
         import android.os.IBinder;
         import android.os.Parcel;
         import android.os.Parcelable;
@@ -175,6 +179,8 @@ public class NFCReader extends AppCompatActivity {
                 NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
                 msgs = new NdefMessage[] { msg };
                 mTags.add(tag);
+
+                Toast.makeText(this,payload.toString(),Toast.LENGTH_LONG).show();
             }
             // Setup the views
             buildTagViews(msgs);
@@ -412,6 +418,8 @@ public class NFCReader extends AppCompatActivity {
         // Build views for all of the sub records
         Date now = new Date();
         List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
+
+
         final int size = records.size();
         for (int i = 0; i < size; i++) {
 
@@ -458,18 +466,35 @@ public class NFCReader extends AppCompatActivity {
 
 
 
+            TextView imagePath = new TextView(this);
+
+
+
+
             content.addView(record.getView(this, inflater, content, i), 1 + i);
+            //Toast.makeText(this,msgs[0].toString(),Toast.LENGTH_LONG).show();
             content.addView(dlText,2+i);
             content.addView(dlImage,3+i);
             content.addView(dlPDF,4+i);
-            //content.addView(imageDownloadPath);
-            content.addView(inflater.inflate(R.layout.tag_divider, content, false), 5 + i);
+            content.addView(imagePath,5+i);
+
+
+
+            content.addView(inflater.inflate(R.layout.tag_divider, content, false), 6 + i);
+
+
 
         }
+
+        NoticeIDPath=NdefMessageParser.stringValue;
+
+        Toast.makeText(this,NoticeIDPath,Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void downloadImage(){
-        NoticeIDPath="Notice_1";
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
 
@@ -482,7 +507,7 @@ public class NFCReader extends AppCompatActivity {
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                   // imageDownloadPath.setText(localFile.getAbsolutePath());
+
 
 
 
@@ -495,8 +520,9 @@ public class NFCReader extends AppCompatActivity {
             });
         } catch (IOException e ) {}
 
+
         if(localFile!=null)
-        Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
 
         else
             Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
@@ -504,7 +530,7 @@ public class NFCReader extends AppCompatActivity {
     }
 
     private void downloadPDF(){
-        NoticeIDPath="Notice_1";
+       // NoticeIDPath="Notice_1";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
 
@@ -517,7 +543,7 @@ public class NFCReader extends AppCompatActivity {
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // imageDownloadPath.setText(localFile.getAbsolutePath());
+
 
 
 
@@ -531,7 +557,7 @@ public class NFCReader extends AppCompatActivity {
         } catch (IOException e ) {}
 
         if(localFile!=null)
-            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
 
         else
             Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
@@ -539,7 +565,7 @@ public class NFCReader extends AppCompatActivity {
     }
 
     private void downloadTXT(){
-        NoticeIDPath="Notice_1";
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
 
@@ -552,7 +578,7 @@ public class NFCReader extends AppCompatActivity {
             storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // imageDownloadPath.setText(localFile.getAbsolutePath());
+
 
 
 
@@ -566,7 +592,7 @@ public class NFCReader extends AppCompatActivity {
         } catch (IOException e ) {}
 
         if(localFile!=null)
-            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
 
         else
             Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
@@ -583,37 +609,14 @@ public class NFCReader extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
 
-        if (mTags.size() == 0) {
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    // app icon in action bar clicked; go home
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    return true;
-                default:
-                    Toast.makeText(this, R.string.nothing_scanned, Toast.LENGTH_LONG).show();;
-            }
 
-            return true;
-        }
 
         switch (item.getItemId()) {
             case R.id.menu_main_clear:
                 clearTags();
                 return true;
-            case R.id.menu_copy_hex:
-                copyIds(getIdsHex());
-                return true;
-            case R.id.menu_copy_reversed_hex:
-                copyIds(getIdsReversedHex());
-                return true;
-            case R.id.menu_copy_dec:
-                copyIds(getIdsDec());
-                return true;
-            case R.id.menu_copy_reversed_dec:
-                copyIds(getIdsReversedDec());
-                return true;
+
+
             case android.R.id.home:
                 // app icon in action bar clicked; go home
                 Intent intent = new Intent(this, MainActivity.class);
@@ -635,56 +638,32 @@ public class NFCReader extends AppCompatActivity {
         }
     }
 
-    private void copyIds(String text) {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText("NFC IDs", text);
-        clipboard.setPrimaryClip(clipData);
-        Toast.makeText(this, mTags.size() + " IDs copied", Toast.LENGTH_SHORT).show();
-    }
 
-    private String getIdsHex() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toHex(tag.getId()));
-            builder.append('\n');
-        }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString().replace(" ", "");
-    }
-
-    private String getIdsReversedHex() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toReversedHex(tag.getId()));
-            builder.append('\n');
-        }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString().replace(" ", "");
-    }
-
-    private String getIdsDec() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toDec(tag.getId()));
-            builder.append('\n');
-        }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString();
-    }
-
-    private String getIdsReversedDec() {
-        StringBuilder builder = new StringBuilder();
-        for (Tag tag : mTags) {
-            builder.append(toReversedDec(tag.getId()));
-            builder.append('\n');
-        }
-        builder.setLength(builder.length() - 1); // Remove last new line
-        return builder.toString();
-    }
 
     @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
         resolveIntent(intent);
+    }
+
+    public void openLocation(View view) {
+
+        String loc=getExternalFilesDir(null).toString();
+        Uri selectedUri = Uri.parse(loc);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(selectedUri, "resource/folder");
+
+        if (intent.resolveActivityInfo(getPackageManager(), 0) != null)
+        {
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this,"No File Explorer App Found in Device",Toast.LENGTH_LONG).show();
+
+            // if you reach this place, it means there is no any file
+            // explorer app installed on your device
+        }
+
     }
 }

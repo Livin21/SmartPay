@@ -1,3 +1,8 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -71,6 +76,7 @@
         android:weightSum="2">
 
         <Button
+            android:theme="@style/ThemeOverlay.MyDarkButton"
             android:layout_weight="1"
             android:id="@+id/chooseFileBTN"
             android:layout_width="wrap_content"
@@ -78,6 +84,7 @@
             android:text="Choose File"/>
 
         <TextView
+
             android:id="@+id/chosenFileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,18 +96,81 @@
 
 
     <Button
-
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:id="@+id/uploadFileBTN"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Upload File"/>
+        android:text="Upload File to Server"/>
 
     <Button
+        android:theme="@style/ThemeOverlay.MyDarkButton"
         android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Write to NFC Tag" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start write modus" />
+        android:text="Note\nUploading Files to server and not writing to NFC tag may cause synchronization conflicts"/>
+
+    <RelativeLayout
+
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/grey_300"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        >
 
 
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:id="@+id/noticeUploaded"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_below="@id/noticeUploaded"
+            android:id="@+id/imageUploaded"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_below="@id/imageUploaded"
+            android:id="@+id/pdfUploaded"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_below="@id/pdfUploaded"
+            android:id="@+id/tagWritten"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </LinearLayout>
+
+
+
+</ScrollView>

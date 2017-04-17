@@ -22,6 +22,8 @@ import com.google.common.base.Preconditions;
  */
 public class TextRecord implements ParsedNdefRecord {
 
+
+
     /** ISO/IANA language code */
     private final String mLanguageCode;
 
@@ -74,6 +76,7 @@ public class TextRecord implements ParsedNdefRecord {
             String text =
                     new String(payload, languageCodeLength + 1,
                             payload.length - languageCodeLength - 1, textEncoding);
+
             return new TextRecord(languageCode, text);
         } catch (UnsupportedEncodingException e) {
             // should never happen unless we get a malformed tag.

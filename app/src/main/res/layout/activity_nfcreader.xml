@@ -16,6 +16,15 @@
             android:padding="6dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:autoLink="email|web"
-            android:text="Scan TAGs to get Notice IDs" />
+            android:text="Scan TAGs to get Notice IDs"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+        <Button
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:onClick="openLocation"
+            android:text="Open Download Location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>

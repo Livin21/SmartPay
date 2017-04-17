@@ -203,6 +203,9 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
 
                             //and displaying a success toast
                             Toast.makeText(getApplicationContext(), "Image Uploaded ", Toast.LENGTH_LONG).show();
+                            TextView txtView = (TextView) findViewById(R.id.imageUploaded);
+                            txtView.setVisibility(View.VISIBLE);
+                            txtView.setText("Image Uploaded.");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -266,6 +269,9 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
                 //dismissProgressDialog();
                 progressDialog.dismiss();
                 Toast.makeText(NFCWriter.this, "Notice Upload successful!", Toast.LENGTH_SHORT).show();
+                TextView txtView = (TextView) findViewById(R.id.noticeUploaded);
+                txtView.setVisibility(View.VISIBLE);
+                txtView.setText("Notice Uploaded.");
             }
         });
 
@@ -292,6 +298,10 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
 
                             //and displaying a success toast
                             Toast.makeText(getApplicationContext(), "PDF Uploaded ", Toast.LENGTH_LONG).show();
+
+                            TextView txtView = (TextView) findViewById(R.id.pdfUploaded);
+                            txtView.setVisibility(View.VISIBLE);
+                            txtView.setText("PDF Uploaded.");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -388,6 +398,10 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
             if (writeTag(message, detectedTag)) {
                 Toast.makeText(this, "SUCCESSFUL! Wrote ID to Tag", Toast.LENGTH_LONG)
                         .show();
+
+                TextView txtView = (TextView) findViewById(R.id.tagWritten);
+                txtView.setVisibility(View.VISIBLE);
+                txtView.setText("Tag Write Successful");
 
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
@@ -510,25 +524,7 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-//    public void radioUpdateUI(View view) {
-//        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
-//        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
-//        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
-//
-//        if(textRadio.isChecked())
-//        {
-//            uploadBTN.setVisibility(View.GONE);
-//            fileRadio.setChecked(false);
-//        }
-//
-//        else if (fileRadio.isChecked())
-//        {
-//            uploadBTN.setVisibility(View.VISIBLE);
-//            textRadio.setChecked(false);
-//        }
-//
-//
-//    }
+
 
     public void pdfRadioClicked(View view) {
         RadioButton imageRadio= (RadioButton) findViewById(R.id.imageRadio);
@@ -542,27 +538,5 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
 
     }
 
-//    public void textRadioUI(View view) {
-//
-//
-//        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
-//        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
-//        Button chooseBTN= (Button) findViewById(R.id.chooseFileBTN);
-//
-//        uploadBTN.setVisibility(View.GONE);
-//        chooseBTN.setVisibility(View.GONE);
-//        fileRadio.setChecked(false);
-//    }
-//
-//    public void fileRadioUI(View view) {
-//        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
-//        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
-//        Button chooseBTN= (Button) findViewById(R.id.chooseFileBTN);
-//
-//        uploadBTN.setVisibility(View.VISIBLE);
-//        chooseBTN.setVisibility(View.VISIBLE);
-//
-//        textRadio.setChecked(false);
-//
-//    }
+
 }

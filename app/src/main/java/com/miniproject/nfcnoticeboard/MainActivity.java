@@ -1,7 +1,7 @@
 package com.miniproject.nfcnoticeboard;
 
 
-import android.app.ActionBar;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,10 +34,7 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    public void testAuth(View view) {
-        Intent intent=new Intent(this,Main2Activity.class);
-        this.startActivity(intent);
-    }
+
 
 
     @Override
