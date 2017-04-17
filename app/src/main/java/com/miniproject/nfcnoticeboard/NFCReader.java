@@ -1,5 +1,7 @@
 package com.miniproject.nfcnoticeboard;
 
+        import java.io.File;
+        import java.io.IOException;
         import java.nio.charset.Charset;
         import java.text.DateFormat;
         import java.text.SimpleDateFormat;
@@ -8,6 +10,11 @@ package com.miniproject.nfcnoticeboard;
         import java.util.List;
         import java.util.Locale;
 
+        import com.google.android.gms.tasks.OnFailureListener;
+        import com.google.android.gms.tasks.OnSuccessListener;
+        import com.google.firebase.storage.FileDownloadTask;
+        import com.google.firebase.storage.FirebaseStorage;
+        import com.google.firebase.storage.StorageReference;
         import com.miniproject.nfcnoticeboard.record.ParsedNdefRecord;
         import android.app.Activity;
         import android.app.AlertDialog;
@@ -16,6 +23,8 @@ package com.miniproject.nfcnoticeboard;
         import android.content.ClipboardManager;
         import android.content.DialogInterface;
         import android.content.Intent;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
         import android.nfc.NdefMessage;
         import android.nfc.NdefRecord;
         import android.nfc.NfcAdapter;
@@ -28,6 +37,7 @@ package com.miniproject.nfcnoticeboard;
         import android.os.Parcel;
         import android.os.Parcelable;
         import android.provider.Settings;
+        import android.support.annotation.NonNull;
         import android.support.v7.app.AppCompatActivity;
         import android.view.Gravity;
         import android.view.LayoutInflater;
@@ -54,6 +64,9 @@ public class NFCReader extends AppCompatActivity {
     private AlertDialog mDialog;
 
     private List<Tag> mTags = new ArrayList<>();
+
+    String NoticeIDPath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -394,32 +407,170 @@ public class NFCReader extends AppCompatActivity {
         LinearLayout row = new LinearLayout(this);
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
+       // imageDownloadPath.setText("Not Downloaded Yet");
         // Parse the first message in the list
         // Build views for all of the sub records
         Date now = new Date();
         List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
         final int size = records.size();
         for (int i = 0; i < size; i++) {
-           // Button btnTag = new Button(this);
-//            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)btnTag.getLayoutParams();
-//            params.width=LinearLayout.LayoutParams.WRAP_CONTENT;
-//            params.height=LinearLayout.LayoutParams.WRAP_CONTENT;
-//            params.gravity= Gravity.END;
-//            btnTag.setLayoutParams(params);
 
-         //   String msg;
+            String msg1;
+            msg1="Download Image";
+            Button dlImage = new Button(this);
+            dlImage.setText(msg1);
+            dlImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    downloadImage();
+                }
+            });
+
+            String msg2;
+            msg2="Download PDF";
+            Button dlPDF = new Button(this);
+            dlPDF.setText(msg2);
+            dlPDF.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    downloadPDF();
+                }
+            });
+
+            String msg3;
+            msg3="Download Notice";
+            Button dlText = new Button(this);
+            dlText.setText(msg3);
+            dlText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    downloadTXT();
+                }
+            });
+
+
+
+
             TextView timeView = new TextView(this);
             timeView.setText(TIME_FORMAT.format(now));
             content.addView(timeView, 0);
             ParsedNdefRecord record = records.get(i);
-          //  btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-          //  msg="Download Notice"+record.getView(this, inflater, content, i);
-          //  btnTag.setText(msg);
+
+
+
             content.addView(record.getView(this, inflater, content, i), 1 + i);
-           // content.addView(btnTag,2+i);
-            content.addView(inflater.inflate(R.layout.tag_divider, content, false), 2 + i);
+            content.addView(dlText,2+i);
+            content.addView(dlImage,3+i);
+            content.addView(dlPDF,4+i);
+            //content.addView(imageDownloadPath);
+            content.addView(inflater.inflate(R.layout.tag_divider, content, false), 5 + i);
 
         }
+    }
+
+    private void downloadImage(){
+        NoticeIDPath="Notice_1";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+
+        File localFile=null;
+
+        StorageReference storageRef = storageReference.child(NoticeIDPath+"/image.jpg");
+
+        try {
+            localFile = File.createTempFile(NoticeIDPath+"_", ".jpg",getExternalFilesDir(null));
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                   // imageDownloadPath.setText(localFile.getAbsolutePath());
+
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        } catch (IOException e ) {}
+
+        if(localFile!=null)
+        Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+
+        else
+            Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
+
+    }
+
+    private void downloadPDF(){
+        NoticeIDPath="Notice_1";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+
+        File localFile=null;
+
+        StorageReference storageRef = storageReference.child(NoticeIDPath+"/document.pdf");
+
+        try {
+            localFile = File.createTempFile(NoticeIDPath+"_", ".pdf",getExternalFilesDir(null));
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // imageDownloadPath.setText(localFile.getAbsolutePath());
+
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        } catch (IOException e ) {}
+
+        if(localFile!=null)
+            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+
+        else
+            Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
+
+    }
+
+    private void downloadTXT(){
+        NoticeIDPath="Notice_1";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+
+        File localFile=null;
+
+        StorageReference storageRef = storageReference.child(NoticeIDPath+"/noticeBody.txt");
+
+        try {
+            localFile = File.createTempFile(NoticeIDPath+"_", ".txt",getExternalFilesDir(null));
+            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // imageDownloadPath.setText(localFile.getAbsolutePath());
+
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        } catch (IOException e ) {}
+
+        if(localFile!=null)
+            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+
+        else
+            Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
+
     }
 
     @Override

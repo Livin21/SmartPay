@@ -9,14 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <EditText
+    <TextView
         android:id="@+id/mime"
         android:hint="Mime-type"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="application/Notice ID" />
+        android:text="NFCSmartNoticeBoard/Notice ID" />
 
-    <EditText
+    <TextView
         android:id="@+id/value"
         android:hint="Value"
         android:layout_width="fill_parent"
@@ -34,24 +34,28 @@
         <RadioButton
             android:checked="true"
             android:layout_weight="1"
-            android:id="@+id/textRadio"
+            android:id="@+id/pdfRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Text Only"
-            android:onClick="textRadioUI"
+            android:text="Add PDF"
+            android:onClick="pdfRadioClicked"
+
             />
 
         <RadioButton
             android:layout_weight="1"
-            android:id="@+id/fileRadio"
+            android:id="@+id/imageRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add File"
-            android:onClick="fileRadioUI"
+            android:text="Add Image"
+            android:onClick="imageRadioClicked"
+
             />
 
 
     </LinearLayout>
+
+
 
     <EditText
         android:id="@+id/noticeDetails"
@@ -60,31 +64,43 @@
         android:hint="Notice Details"
         />
 
-    <Button
-        android:visibility="gone"
-        android:id="@+id/chooseFileBTN"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose File"/>
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/chooseFileBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose File"/>
+
+        <TextView
+            android:id="@+id/chosenFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="No file selected"
+            />
+
+    </LinearLayout>
+
 
     <Button
-        android:visibility="gone"
+
         android:id="@+id/uploadFileBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload File"/>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
-
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start write modus" />
+
+
 
 </LinearLayout>

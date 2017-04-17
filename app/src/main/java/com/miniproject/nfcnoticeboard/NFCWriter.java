@@ -2,8 +2,12 @@ package com.miniproject.nfcnoticeboard;
 
 
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -16,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.nfc.NdefMessage;
@@ -26,6 +31,7 @@ import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -82,6 +89,8 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
     //a Uri object to store file path
     private Uri filePath;
 
+    String NoticeIDPath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +103,7 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         buttonChoose = (Button) findViewById(R.id.chooseFileBTN);
         buttonUpload = (Button) findViewById(R.id.uploadFileBTN);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        //imageView = (ImageView) findViewById(R.id.imageView);
 
         buttonChoose.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
@@ -117,7 +126,9 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         int NoticeID=pref.getInt("NoticeID", 0);
 
         TextView textView= (TextView) findViewById(R.id.value);
-        textView.setText(valueOf(NoticeID));
+        textView.setText("Notice_"+valueOf(NoticeID));
+
+        NoticeIDPath="Notice_"+valueOf(NoticeID);
 
         ((Button) findViewById(R.id.button)).setOnClickListener(new OnClickListener() {
 
@@ -142,31 +153,35 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
     }
 
     //method to show file chooser
-    private void showFileChooser() {
+    private void showImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
+    private void showPDFChooser() {
+        Intent intent = new Intent();
+        intent.setType("application/pdf");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select PDF"), PICK_IMAGE_REQUEST);
+
+    }
+
     //handling the image chooser activity result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+        TextView result = (TextView) findViewById(R.id.chosenFileName);
+        result.setText("File Selected");
+
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     //this method will upload the file
-    private void uploadFile() {
+    private void uploadImage() {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
@@ -177,7 +192,7 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            StorageReference riversRef = storageReference.child("images/pic.jpg");
+            StorageReference riversRef = storageReference.child(NoticeIDPath+"/image.jpg");
             riversRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -187,7 +202,96 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
                             progressDialog.dismiss();
 
                             //and displaying a success toast
-                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Image Uploaded ", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            //if the upload is not successfull
+                            //hiding the progress dialog
+                            progressDialog.dismiss();
+
+                            //and displaying error message
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //calculating progress percentage
+                            @SuppressWarnings("VisibleForTests")double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                            //displaying percentage in progress dialog
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        }
+                    });
+        }
+        //if there is not any file
+        else {
+            //you can display an error toast
+        }
+    }
+
+    private void uploadText(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+
+        StorageReference txtRef = storageReference.child(NoticeIDPath+"/noticeBody.txt");
+
+        EditText noticeDetails = (EditText) findViewById(R.id.noticeDetails);
+        String writeString = noticeDetails.getText().toString();
+
+        InputStream stream = new ByteArrayInputStream(writeString.getBytes(StandardCharsets.UTF_8));
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading");
+        progressDialog.show();
+
+       // showProgressDialog("Upload File", "Uploading text file...");
+        UploadTask uploadTask = txtRef.putStream(stream);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                exception.printStackTrace();
+                //dismissProgressDialog();
+
+                progressDialog.dismiss();
+
+                Toast.makeText(NFCWriter.this, "Upload Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //dismissProgressDialog();
+                progressDialog.dismiss();
+                Toast.makeText(NFCWriter.this, "Notice Upload successful!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    private void uploadPDF() {
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        //if there is a file to upload
+        if (filePath != null) {
+            //displaying a progress dialog while upload is going on
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+
+            StorageReference riversRef = storageReference.child(NoticeIDPath+"/document.pdf");
+            riversRef.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //if the upload is successfull
+                            //hiding the progress dialog
+                            progressDialog.dismiss();
+
+                            //and displaying a success toast
+                            Toast.makeText(getApplicationContext(), "PDF Uploaded ", Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -219,14 +323,31 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
     }
     @Override
     public void onClick(View view) {
+
+        RadioButton imageRadio= (RadioButton) findViewById(R.id.imageRadio);
+        RadioButton pdfRadio= (RadioButton) findViewById(R.id.pdfRadio);
+
         //if the clicked button is choose
         if (view == buttonChoose) {
-            showFileChooser();
+
+
+            if (imageRadio.isChecked())
+                showImageChooser();
+
+            else if (pdfRadio.isChecked())
+                showPDFChooser();
+
         }
         //if the clicked button is upload
         else if (view == buttonUpload) {
 
-            uploadFile();
+            if (imageRadio.isChecked())
+                uploadImage();
+
+            else if (pdfRadio.isChecked())
+                uploadPDF();
+
+            uploadText();
 
         }
     }
@@ -389,47 +510,59 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    public void radioUpdateUI(View view) {
-        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
-        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
-        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+//    public void radioUpdateUI(View view) {
+//        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
+//        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
+//        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+//
+//        if(textRadio.isChecked())
+//        {
+//            uploadBTN.setVisibility(View.GONE);
+//            fileRadio.setChecked(false);
+//        }
+//
+//        else if (fileRadio.isChecked())
+//        {
+//            uploadBTN.setVisibility(View.VISIBLE);
+//            textRadio.setChecked(false);
+//        }
+//
+//
+//    }
 
-        if(textRadio.isChecked())
-        {
-            uploadBTN.setVisibility(View.GONE);
-            fileRadio.setChecked(false);
-        }
+    public void pdfRadioClicked(View view) {
+        RadioButton imageRadio= (RadioButton) findViewById(R.id.imageRadio);
+        imageRadio.setChecked(false);
 
-        else if (fileRadio.isChecked())
-        {
-            uploadBTN.setVisibility(View.VISIBLE);
-            textRadio.setChecked(false);
-        }
+    }
 
+    public void imageRadioClicked(View view) {
+        RadioButton pdfRadio= (RadioButton) findViewById(R.id.pdfRadio);
+        pdfRadio.setChecked(false);
 
     }
 
-    public void textRadioUI(View view) {
-
-
-        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
-        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
-        Button chooseBTN= (Button) findViewById(R.id.chooseFileBTN);
-
-        uploadBTN.setVisibility(View.GONE);
-        chooseBTN.setVisibility(View.GONE);
-        fileRadio.setChecked(false);
-    }
-
-    public void fileRadioUI(View view) {
-        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
-        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
-        Button chooseBTN= (Button) findViewById(R.id.chooseFileBTN);
-
-        uploadBTN.setVisibility(View.VISIBLE);
-        chooseBTN.setVisibility(View.VISIBLE);
-
-        textRadio.setChecked(false);
-
-    }
+//    public void textRadioUI(View view) {
+//
+//
+//        RadioButton fileRadio= (RadioButton) findViewById(R.id.fileRadio);
+//        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+//        Button chooseBTN= (Button) findViewById(R.id.chooseFileBTN);
+//
+//        uploadBTN.setVisibility(View.GONE);
+//        chooseBTN.setVisibility(View.GONE);
+//        fileRadio.setChecked(false);
+//    }
+//
+//    public void fileRadioUI(View view) {
+//        RadioButton textRadio= (RadioButton) findViewById(R.id.textRadio);
+//        Button uploadBTN= (Button) findViewById(R.id.uploadFileBTN);
+//        Button chooseBTN= (Button) findViewById(R.id.chooseFileBTN);
+//
+//        uploadBTN.setVisibility(View.VISIBLE);
+//        chooseBTN.setVisibility(View.VISIBLE);
+//
+//        textRadio.setChecked(false);
+//
+//    }
 }
