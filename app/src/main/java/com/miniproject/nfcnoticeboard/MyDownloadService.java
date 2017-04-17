@@ -75,7 +75,7 @@ public class MyDownloadService extends MyBaseTaskService {
                     @Override
                     public void doInBackground(StreamDownloadTask.TaskSnapshot taskSnapshot,
                                                InputStream inputStream) throws IOException {
-                        long totalBytes = taskSnapshot.getTotalByteCount();
+                        @SuppressWarnings("VisibleForTests")   long totalBytes = taskSnapshot.getTotalByteCount();
                         long bytesDownloaded = 0;
 
                         byte[] buffer = new byte[1024];
@@ -92,6 +92,7 @@ public class MyDownloadService extends MyBaseTaskService {
                     }
                 })
                 .addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
+                    @SuppressWarnings("VisibleForTests")
                     @Override
                     public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
                         Log.d(TAG, "download:SUCCESS");

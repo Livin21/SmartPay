@@ -83,6 +83,7 @@ public class MyUploadService extends MyBaseTaskService {
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
         photoRef.putFile(fileUri).
                 addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @SuppressWarnings("VisibleForTests")
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                         showProgressNotification(getString(R.string.progress_uploading),
@@ -97,7 +98,7 @@ public class MyUploadService extends MyBaseTaskService {
                         Log.d(TAG, "uploadFromUri:onSuccess");
 
                         // Get the public download URL
-                        Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
+                        @SuppressWarnings("VisibleForTests")    Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
 
                         // [START_EXCLUDE]
                         broadcastUploadFinished(downloadUri, fileUri);
