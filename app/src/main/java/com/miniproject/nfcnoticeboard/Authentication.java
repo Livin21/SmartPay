@@ -26,6 +26,8 @@ public class Authentication extends AppCompatActivity implements
     private EditText mEmailField;
     private EditText mPasswordField;
 
+    public static Boolean isAdmin=false;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "Authentication Activity";
@@ -125,6 +127,8 @@ public class Authentication extends AppCompatActivity implements
             return;
         }
 
+
+
         //showProgressDialog();
 
         // [START sign_in_with_email]
@@ -133,6 +137,9 @@ public class Authentication extends AppCompatActivity implements
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+
+
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -190,6 +197,17 @@ public class Authentication extends AppCompatActivity implements
             mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
                     user.getEmail(), user.isEmailVerified()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+
+            user.getEmail();
+
+
+
+            if(user.getEmail().equals("nfcsmartnoticeboard@gmail.com"))
+                isAdmin=true;
+            else
+                isAdmin=false;
+
+            Log.d(TAG,"Email="+user.getEmail());
 
             findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
             findViewById(R.id.email_password_fields).setVisibility(View.GONE);
@@ -254,8 +272,22 @@ public class Authentication extends AppCompatActivity implements
     }
 
     public void launchMain(View view) {
-        Intent intent=new Intent(this,MainActivity.class);
-        this.startActivity(intent);
+
+
+
+
+       // Toast.makeText()
+
+        if (isAdmin) {
+            Intent intent = new Intent(this, MainActivity.class);
+            this.startActivity(intent);
+
+        }
+        else{
+            Intent intent = new Intent(this, NFCReader.class);
+            this.startActivity(intent);
+        }
+
     }
 
 }

@@ -76,6 +76,8 @@ public class NFCReader extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcreader);
+
+        if (Authentication.isAdmin)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTagContent = (LinearLayout) findViewById(R.id.list);
         resolveIntent(getIntent());
