@@ -1,10 +1,9 @@
 package com.miniproject.nfcnoticeboard;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -38,10 +37,10 @@ public class Authentication extends AppCompatActivity implements
         setContentView(R.layout.activity_authentication);
 
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
-        mDetailTextView = (TextView) findViewById(R.id.detail);
-        mEmailField = (EditText) findViewById(R.id.field_email);
-        mPasswordField = (EditText) findViewById(R.id.field_password);
+        mStatusTextView = findViewById(R.id.status);
+        mDetailTextView = findViewById(R.id.detail);
+        mEmailField = findViewById(R.id.field_email);
+        mPasswordField = findViewById(R.id.field_password);
 
         // Buttons
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
@@ -118,12 +117,12 @@ public class Authentication extends AppCompatActivity implements
                                         Toast.LENGTH_SHORT).show();
 
                             else
-                            Toast.makeText(Authentication.this, "Sign in Failed",
-                                    Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Authentication.this, "Sign in Failed",
+                                        Toast.LENGTH_SHORT).show();
                         }
 
                         // [START_EXCLUDE]
-                      //  hideProgressDialog();
+                        //  hideProgressDialog();
                         // [END_EXCLUDE]
                     }
                 });
@@ -210,11 +209,7 @@ public class Authentication extends AppCompatActivity implements
             user.getEmail();
 
 
-
-            if(user.getEmail().equals("nfcsmartnoticeboard@gmail.com"))
-                isAdmin=true;
-            else
-                isAdmin=false;
+            isAdmin = user.getEmail().equals("nfcsmartnoticeboard@gmail.com");
 
             Log.d(TAG,"Email="+user.getEmail());
 
