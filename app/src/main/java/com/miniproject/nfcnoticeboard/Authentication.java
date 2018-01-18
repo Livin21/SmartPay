@@ -90,7 +90,7 @@ public class Authentication extends AppCompatActivity implements
         }
     }
 
-    private void createAccount(String email, String password) {
+    private void createAccount(final String email, final String password) {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
@@ -109,6 +109,15 @@ public class Authentication extends AppCompatActivity implements
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            if(password.length()<6)
+                                Toast.makeText(Authentication.this, "Password must be at least 6 characters ",
+                                        Toast.LENGTH_SHORT).show();
+
+                            else if(!email.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}$"))
+                                Toast.makeText(Authentication.this, "Invalid Email",
+                                        Toast.LENGTH_SHORT).show();
+
+                            else
                             Toast.makeText(Authentication.this, "Sign in Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
