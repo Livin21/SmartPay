@@ -58,7 +58,7 @@ import static java.lang.String.valueOf;
 /**
  * Activity to write NFC tags with own mimetype and ID
  */
-public class NFCWriter extends AppCompatActivity implements View.OnClickListener {
+public class NFCWriter extends AppCompatActivity {
 
 
 
@@ -79,12 +79,6 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
 
     private static final int PICK_IMAGE_REQUEST = 234;
 
-    //Buttons
-    private Button buttonChoose;
-    private Button buttonUpload;
-
-    //ImageView
-    private ImageView imageView;
 
     //a Uri object to store file path
     private Uri filePath;
@@ -99,9 +93,6 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //imageView = (ImageView) findViewById(R.id.imageView);
-
-        buttonChoose.setOnClickListener(this);
-        buttonUpload.setOnClickListener(this);
 
         mDialog = new AlertDialog.Builder(this).setNeutralButton("Ok", null).create();
 
@@ -223,10 +214,6 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
                         }
                     });
         }
-        //if there is not any file
-        else {
-            //you can display an error toast
-        }
     }
 
     private void uploadText(){
@@ -269,79 +256,7 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         });
 
     }
-    private void uploadPDF() {
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
-        //if there is a file to upload
-        if (filePath != null) {
-            //displaying a progress dialog while upload is going on
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading");
-            progressDialog.show();
-
-            StorageReference riversRef = storageReference.child(NoticeIDPath+"/document.pdf");
-            riversRef.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            //if the upload is successfull
-                            //hiding the progress dialog
-                            progressDialog.dismiss();
-
-                            //and displaying a success toast
-                            Toast.makeText(getApplicationContext(), "PDF Uploaded ", Toast.LENGTH_LONG).show();
-
-                            TextView txtView = (TextView) findViewById(R.id.pdfUploaded);
-                            txtView.setVisibility(View.VISIBLE);
-                            txtView.setText("PDF Uploaded.");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            //if the upload is not successfull
-                            //hiding the progress dialog
-                            progressDialog.dismiss();
-
-                            //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            //calculating progress percentage
-                            @SuppressWarnings("VisibleForTests")double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-                            //displaying percentage in progress dialog
-                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                        }
-                    });
-        }
-        //if there is not any file
-        else {
-            //you can display an error toast
-        }
-    }
-    @Override
-    public void onClick(View view) {
-
-
-        //if the clicked button is choose
-        if (view == buttonChoose) {
-
-
-
-        }
-        //if the clicked button is upload
-        else if (view == buttonUpload) {
-
-
-            uploadText();
-
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
