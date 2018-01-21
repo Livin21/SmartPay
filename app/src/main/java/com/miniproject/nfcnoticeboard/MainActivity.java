@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Authentication.signIn(this, FirebaseAuth.getInstance(),"nfcsmartnoticeboard@gmail.com","password");
 
     }
 
@@ -37,17 +41,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go home
-                Intent intent = new Intent(this, Authentication.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

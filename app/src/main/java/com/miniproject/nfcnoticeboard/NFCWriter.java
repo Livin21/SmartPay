@@ -98,11 +98,6 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_nfcwriter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-        buttonChoose = (Button) findViewById(R.id.chooseFileBTN);
-        buttonUpload = (Button) findViewById(R.id.uploadFileBTN);
-
         //imageView = (ImageView) findViewById(R.id.imageView);
 
         buttonChoose.setOnClickListener(this);
@@ -172,8 +167,6 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        TextView result = (TextView) findViewById(R.id.chosenFileName);
-        result.setText("File Selected");
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
@@ -334,28 +327,16 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
 
-        RadioButton imageRadio= (RadioButton) findViewById(R.id.imageRadio);
-        RadioButton pdfRadio= (RadioButton) findViewById(R.id.pdfRadio);
 
         //if the clicked button is choose
         if (view == buttonChoose) {
 
 
-            if (imageRadio.isChecked())
-                showImageChooser();
-
-            else if (pdfRadio.isChecked())
-                showPDFChooser();
 
         }
         //if the clicked button is upload
         else if (view == buttonUpload) {
 
-            if (imageRadio.isChecked())
-                uploadImage();
-
-            else if (pdfRadio.isChecked())
-                uploadPDF();
 
             uploadText();
 
@@ -424,6 +405,7 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
     * Writes an NdefMessage to a NFC tag
     */
     public boolean writeTag(NdefMessage message, Tag tag) {
+        uploadText();
         int size = message.toByteArray().length;
         try {
             Ndef ndef = Ndef.get(tag);
@@ -526,17 +508,7 @@ public class NFCWriter extends AppCompatActivity implements View.OnClickListener
 
 
 
-    public void pdfRadioClicked(View view) {
-        RadioButton imageRadio= (RadioButton) findViewById(R.id.imageRadio);
-        imageRadio.setChecked(false);
 
-    }
-
-    public void imageRadioClicked(View view) {
-        RadioButton pdfRadio= (RadioButton) findViewById(R.id.pdfRadio);
-        pdfRadio.setChecked(false);
-
-    }
 
 
 }

@@ -28,79 +28,14 @@
         android:layout_height="wrap_content"
         android:text="loading" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        >
-
-
-        <RadioButton
-            android:checked="true"
-            android:layout_weight="1"
-            android:id="@+id/pdfRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add PDF"
-            android:onClick="pdfRadioClicked"
-
-            />
-
-        <RadioButton
-            android:layout_weight="1"
-            android:id="@+id/imageRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Image"
-            android:onClick="imageRadioClicked"
-
-            />
-
-
-    </LinearLayout>
-
 
 
     <EditText
         android:id="@+id/noticeDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Notice Details"
+        android:hint="Data"
         />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:theme="@style/ThemeOverlay.MyDarkButton"
-            android:layout_weight="1"
-            android:id="@+id/chooseFileBTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose File"/>
-
-        <TextView
-
-            android:id="@+id/chosenFileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="No file selected"
-            />
-
-    </LinearLayout>
-
-
-    <Button
-        android:theme="@style/ThemeOverlay.MyDarkButton"
-        android:id="@+id/uploadFileBTN"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload File to Server"/>
 
     <Button
         android:theme="@style/ThemeOverlay.MyDarkButton"

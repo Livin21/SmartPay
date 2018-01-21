@@ -1,5 +1,6 @@
 package com.miniproject.nfcnoticeboard;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -171,6 +172,30 @@ public class Authentication extends AppCompatActivity implements
                 });
         // [END sign_in_with_email]
     }
+
+    public static void signIn(final Activity activity, FirebaseAuth mAuth, String email, String password) {
+        // [START sign_in_with_email]
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+                            Toast.makeText(activity, "Sign in Failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+        // [END sign_in_with_email]
+    }
+
 
     private void signOut() {
         mAuth.signOut();
