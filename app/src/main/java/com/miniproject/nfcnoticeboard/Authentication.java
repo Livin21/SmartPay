@@ -173,9 +173,9 @@ public class Authentication extends AppCompatActivity implements
         // [END sign_in_with_email]
     }
 
-    public static void signIn(final Activity activity, FirebaseAuth mAuth, String email, String password) {
+    public static void signIn(final Activity activity, FirebaseAuth mAuth) {
         // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword("nfcsmartnoticeboard@gmail.com", "password")
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

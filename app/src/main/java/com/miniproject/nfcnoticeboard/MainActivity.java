@@ -5,7 +5,6 @@ package com.miniproject.nfcnoticeboard;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Authentication.signIn(this, FirebaseAuth.getInstance(),"nfcsmartnoticeboard@gmail.com","password");
+        Authentication.signIn(this, FirebaseAuth.getInstance());
 
     }
 
@@ -31,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent=new Intent(this,NFCWriter.class);
         this.startActivity(intent);
     }
+
 
     public void callReader(View view) {
 

@@ -386,10 +386,10 @@ public class NFCReader extends AppCompatActivity {
     private long toDec(byte[] bytes) {
         long result = 0;
         long factor = 1;
-        for (int i = 0; i < bytes.length; ++i) {
-            long value = bytes[i] & 0xffl;
+        for (byte aByte : bytes) {
+            long value = aByte & 0xffL;
             result += value * factor;
-            factor *= 256l;
+            factor *= 256L;
         }
         return result;
     }
@@ -398,9 +398,9 @@ public class NFCReader extends AppCompatActivity {
         long result = 0;
         long factor = 1;
         for (int i = bytes.length - 1; i >= 0; --i) {
-            long value = bytes[i] & 0xffl;
+            long value = bytes[i] & 0xffL;
             result += value * factor;
-            factor *= 256l;
+            factor *= 256L;
         }
         return result;
     }
@@ -425,28 +425,6 @@ public class NFCReader extends AppCompatActivity {
         final int size = records.size();
         for (int i = 0; i < size; i++) {
 
-            String msg1;
-            msg1="Download Image";
-            Button dlImage = new Button(this);
-            dlImage.setText(msg1);
-            dlImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    downloadImage();
-                }
-            });
-
-            String msg2;
-            msg2="Download PDF";
-            Button dlPDF = new Button(this);
-            dlPDF.setText(msg2);
-            dlPDF.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    downloadPDF();
-                }
-            });
-
             String msg3;
             msg3="Download Notice";
             Button dlText = new Button(this);
@@ -468,17 +446,10 @@ public class NFCReader extends AppCompatActivity {
 
 
 
-            TextView imagePath = new TextView(this);
-
-
-
 
             content.addView(record.getView(this, inflater, content, i), 1 + i);
             //Toast.makeText(this,msgs[0].toString(),Toast.LENGTH_LONG).show();
             content.addView(dlText,2+i);
-            content.addView(dlImage,3+i);
-            content.addView(dlPDF,4+i);
-            content.addView(imagePath,5+i);
 
 
 
@@ -492,77 +463,6 @@ public class NFCReader extends AppCompatActivity {
 
         Toast.makeText(this,NoticeIDPath,Toast.LENGTH_SHORT).show();
 
-
-    }
-
-    private void downloadImage(){
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
-
-        File localFile=null;
-
-        StorageReference storageRef = storageReference.child(NoticeIDPath+"/image.jpg");
-
-        try {
-            localFile = File.createTempFile(NoticeIDPath+"_", ".jpg",getExternalFilesDir(null));
-            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-
-
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-
-                }
-            });
-        } catch (IOException e ) {}
-
-
-        if(localFile!=null)
-        Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
-
-        else
-            Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
-
-    }
-
-    private void downloadPDF(){
-       // NoticeIDPath="Notice_1";
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
-
-        File localFile=null;
-
-        StorageReference storageRef = storageReference.child(NoticeIDPath+"/document.pdf");
-
-        try {
-            localFile = File.createTempFile(NoticeIDPath+"_", ".pdf",getExternalFilesDir(null));
-            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-
-
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-
-                }
-            });
-        } catch (IOException e ) {}
-
-        if(localFile!=null)
-            Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
-
-        else
-            Toast.makeText(this,"Path not obtained",Toast.LENGTH_LONG).show();
 
     }
 
