@@ -1,6 +1,6 @@
-package com.lmntrx.android.smartpay.record;
+package com.lmntrx.android.smartpay.nfc.record;
 
-/**
+/*
  * Created by ACJLionsRoar on 20/03/17.
  */
 
@@ -27,10 +27,6 @@ import com.lmntrx.android.smartpay.R;
  * A parsed record containing a Uri.
  */
 public class UriRecord implements ParsedNdefRecord {
-
-    private static final String TAG = "UriRecord";
-
-    public static final String RECORD_TYPE = "UriRecord";
 
     /**
      * NFC Forum "URI Record Type Definition"
@@ -90,10 +86,6 @@ public class UriRecord implements ParsedNdefRecord {
         return text;
     }
 
-    public Uri getUri() {
-        return mUri;
-    }
-
     /**
      * Convert {@link android.nfc.NdefRecord} into a {@link android.net.Uri}.
      * This will handle both TNF_WELL_KNOWN / RTD_URI and TNF_ABSOLUTE_URI.
@@ -146,5 +138,4 @@ public class UriRecord implements ParsedNdefRecord {
         }
     }
 
-    private static final byte[] EMPTY = new byte[0];
 }

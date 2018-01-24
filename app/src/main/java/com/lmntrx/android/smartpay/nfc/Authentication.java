@@ -1,5 +1,6 @@
-package com.lmntrx.android.smartpay;
+package com.lmntrx.android.smartpay.nfc;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.lmntrx.android.smartpay.R;
+
+import java.util.Objects;
 
 public class Authentication extends AppCompatActivity implements
         View.OnClickListener{
@@ -55,6 +59,7 @@ public class Authentication extends AppCompatActivity implements
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -234,7 +239,7 @@ public class Authentication extends AppCompatActivity implements
             user.getEmail();
 
 
-            isAdmin = user.getEmail().equals("nfcsmartnoticeboard@gmail.com");
+            isAdmin = Objects.equals(user.getEmail(), "nfcsmartnoticeboard@gmail.com");
 
             Log.d(TAG,"Email="+user.getEmail());
 
@@ -262,27 +267,29 @@ public class Authentication extends AppCompatActivity implements
         // Send verification email
         // [START send_email_verification]
         final FirebaseUser user = mAuth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        // Re-enable button
-                        findViewById(R.id.verify_email_button).setEnabled(true);
+        if (user != null) {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // [START_EXCLUDE]
+                            // Re-enable button
+                            findViewById(R.id.verify_email_button).setEnabled(true);
 
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Authentication.this,
-                                    "Verification email sent to " + user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(Authentication.this,
-                                    "Failed to send verification email.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Authentication.this,
+                                        "Verification email sent to " + user.getEmail(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e(TAG, "sendEmailVerification", task.getException());
+                                Toast.makeText(Authentication.this,
+                                        "Failed to send verification email.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            // [END_EXCLUDE]
                         }
-                        // [END_EXCLUDE]
-                    }
-                });
+                    });
+        }
         // [END send_email_verification]
     }
 

@@ -1,4 +1,4 @@
-package com.lmntrx.android.smartpay;
+package com.lmntrx.android.smartpay.nfc;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
+import com.lmntrx.android.smartpay.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,14 +125,14 @@ public class MyDownloadService extends MyBaseTaskService {
      * Broadcast finished download (success or failure).
      * @return true if a running receiver received the broadcast.
      */
-    private boolean broadcastDownloadFinished(String downloadPath, long bytesDownloaded) {
+    private void broadcastDownloadFinished(String downloadPath, long bytesDownloaded) {
         boolean success = bytesDownloaded != -1;
         String action = success ? DOWNLOAD_COMPLETED : DOWNLOAD_ERROR;
 
         Intent broadcast = new Intent(action)
                 .putExtra(EXTRA_DOWNLOAD_PATH, downloadPath)
                 .putExtra(EXTRA_BYTES_DOWNLOADED, bytesDownloaded);
-        return LocalBroadcastManager.getInstance(getApplicationContext())
+        LocalBroadcastManager.getInstance(getApplicationContext())
                 .sendBroadcast(broadcast);
     }
 
@@ -154,11 +155,4 @@ public class MyDownloadService extends MyBaseTaskService {
     }
 
 
-    public static IntentFilter getIntentFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DOWNLOAD_COMPLETED);
-        filter.addAction(DOWNLOAD_ERROR);
-
-        return filter;
-    }
 }

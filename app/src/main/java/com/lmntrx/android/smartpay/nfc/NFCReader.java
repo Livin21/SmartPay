@@ -1,11 +1,11 @@
-package com.lmntrx.android.smartpay;
+package com.lmntrx.android.smartpay.nfc;
 
         import java.io.File;
         import java.io.IOException;
         import java.nio.charset.Charset;
         import java.text.DateFormat;
         import java.text.SimpleDateFormat;
-        import java.util.ArrayList;
+        import java.util.Arrays;
         import java.util.Date;
         import java.util.List;
         import java.util.Locale;
@@ -15,7 +15,8 @@ package com.lmntrx.android.smartpay;
         import com.google.firebase.storage.FileDownloadTask;
         import com.google.firebase.storage.FirebaseStorage;
         import com.google.firebase.storage.StorageReference;
-        import com.lmntrx.android.smartpay.record.ParsedNdefRecord;
+        import com.lmntrx.android.smartpay.R;
+        import com.lmntrx.android.smartpay.nfc.record.ParsedNdefRecord;
 
         import android.app.Activity;
         import android.app.AlertDialog;
@@ -59,9 +60,6 @@ public class NFCReader extends AppCompatActivity {
     private NdefMessage mNdefPushMessage;
 
     private AlertDialog mDialog;
-
-    private List<Tag> mTags = new ArrayList<>();
-
     String NoticeIDPath;
 
 
@@ -72,7 +70,7 @@ public class NFCReader extends AppCompatActivity {
 
         if (Authentication.isAdmin)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTagContent = (LinearLayout) findViewById(R.id.list);
+        mTagContent = findViewById(R.id.list);
         resolveIntent(getIntent());
 
         mDialog = new AlertDialog.Builder(this).setNeutralButton("Ok", null).create();
@@ -87,7 +85,7 @@ public class NFCReader extends AppCompatActivity {
         mPendingIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mNdefPushMessage = new NdefMessage(new NdefRecord[] { newTextRecord(
-                "Message from NFC Reader :-)", Locale.ENGLISH, true) });
+                Locale.ENGLISH) });
     }
 
     private void showMessage(int title, int message) {
@@ -96,13 +94,13 @@ public class NFCReader extends AppCompatActivity {
         mDialog.show();
     }
 
-    private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
+    private NdefRecord newTextRecord(Locale locale) {
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
 
-        Charset utfEncoding = encodeInUtf8 ? Charset.forName("UTF-8") : Charset.forName("UTF-16");
-        byte[] textBytes = text.getBytes(utfEncoding);
+        Charset utfEncoding = Charset.forName("UTF-8");
+        byte[] textBytes = "Message from NFC Reader :-)".getBytes(utfEncoding);
 
-        int utfBit = encodeInUtf8 ? 0 : (1 << 7);
+        int utfBit = 0;
         char status = (char) (utfBit + langBytes.length);
 
         byte[] data = new byte[1 + langBytes.length + textBytes.length];
@@ -149,7 +147,6 @@ public class NFCReader extends AppCompatActivity {
             }
         });
         builder.create().show();
-        return;
     }
 
     private void resolveIntent(Intent intent) {
@@ -168,14 +165,13 @@ public class NFCReader extends AppCompatActivity {
                 // Unknown tag type
                 byte[] empty = new byte[0];
                 byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-                Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 byte[] payload = dumpTagData(tag).getBytes();
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
                 msgs = new NdefMessage[] { msg };
-                mTags.add(tag);
 
-                Toast.makeText(this,payload.toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(this, Arrays.toString(payload),Toast.LENGTH_LONG).show();
             }
             // Setup the views
             buildTagViews(msgs);
@@ -226,7 +222,7 @@ public class NFCReader extends AppCompatActivity {
                     sb.append('\n');
 
                     sb.append("Mifare size: ");
-                    sb.append(mifareTag.getSize() + " bytes");
+                    sb.append(mifareTag.getSize()).append(" bytes");
                     sb.append('\n');
 
                     sb.append("Mifare sectors: ");
@@ -236,7 +232,7 @@ public class NFCReader extends AppCompatActivity {
                     sb.append("Mifare blocks: ");
                     sb.append(mifareTag.getBlockCount());
                 } catch (Exception e) {
-                    sb.append("Mifare classic error: " + e.getMessage());
+                    sb.append("Mifare classic error: ").append(e.getMessage());
                 }
             }
 
@@ -484,7 +480,7 @@ public class NFCReader extends AppCompatActivity {
 
                 }
             });
-        } catch (IOException e ) {}
+        } catch (IOException ignored) {}
 
         if(localFile!=null)
             Toast.makeText(this,localFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
@@ -524,7 +520,6 @@ public class NFCReader extends AppCompatActivity {
     }
 
     private void clearTags() {
-        mTags.clear();
         for (int i = mTagContent.getChildCount() -1; i >= 0 ; i--) {
             View view = mTagContent.getChildAt(i);
             if (view.getId() != R.id.tag_viewer_text) {

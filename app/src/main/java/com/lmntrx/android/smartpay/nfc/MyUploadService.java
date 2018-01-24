@@ -1,4 +1,4 @@
-package com.lmntrx.android.smartpay;
+package com.lmntrx.android.smartpay.nfc;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,6 +15,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.lmntrx.android.smartpay.R;
+
 /**
  * Service to handle uploading files to Firebase Storage.
  */
@@ -126,7 +128,7 @@ public class MyUploadService extends MyBaseTaskService {
      * Broadcast finished upload (success or failure).
      * @return true if a running receiver received the broadcast.
      */
-    private boolean broadcastUploadFinished(@Nullable Uri downloadUrl, @Nullable Uri fileUri) {
+    private void broadcastUploadFinished(@Nullable Uri downloadUrl, @Nullable Uri fileUri) {
         boolean success = downloadUrl != null;
 
         String action = success ? UPLOAD_COMPLETED : UPLOAD_ERROR;
@@ -134,7 +136,7 @@ public class MyUploadService extends MyBaseTaskService {
         Intent broadcast = new Intent(action)
                 .putExtra(EXTRA_DOWNLOAD_URL, downloadUrl)
                 .putExtra(EXTRA_FILE_URI, fileUri);
-        return LocalBroadcastManager.getInstance(getApplicationContext())
+        LocalBroadcastManager.getInstance(getApplicationContext())
                 .sendBroadcast(broadcast);
     }
 
@@ -156,11 +158,4 @@ public class MyUploadService extends MyBaseTaskService {
         showFinishedNotification(caption, intent, success);
     }
 
-    public static IntentFilter getIntentFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UPLOAD_COMPLETED);
-        filter.addAction(UPLOAD_ERROR);
-
-        return filter;
-    }
 }

@@ -1,4 +1,4 @@
-package com.lmntrx.android.smartpay.record;
+package com.lmntrx.android.smartpay.nfc.record;
 
 /**
  * Created by ACJLionsRoar on 20/03/17.
@@ -42,13 +42,6 @@ public class TextRecord implements ParsedNdefRecord {
 
     public String getText() {
         return mText;
-    }
-
-    /**
-     * Returns the ISO/IANA language code associated with this text element.
-     */
-    public String getLanguageCode() {
-        return mLanguageCode;
     }
 
     // TODO: deal with text fields which span multiple NdefRecords

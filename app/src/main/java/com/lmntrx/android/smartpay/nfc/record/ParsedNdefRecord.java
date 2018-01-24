@@ -1,4 +1,4 @@
-package com.lmntrx.android.smartpay.record;
+package com.lmntrx.android.smartpay.nfc.record;
 
 
 import android.app.Activity;
@@ -12,7 +12,7 @@ public interface ParsedNdefRecord {
     /**
      * Returns a view to display this record.
      */
-    public View getView(Activity activity, LayoutInflater inflater, ViewGroup parent,
-                        int offset);
+    View getView(Activity activity, LayoutInflater inflater, ViewGroup parent,
+                 int offset);
 
 }

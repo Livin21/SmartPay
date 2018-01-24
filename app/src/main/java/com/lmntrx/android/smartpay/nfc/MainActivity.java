@@ -1,4 +1,4 @@
-package com.lmntrx.android.smartpay;
+package com.lmntrx.android.smartpay.nfc;
 
 
 
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.lmntrx.android.smartpay.R;
 
 
 public class MainActivity extends AppCompatActivity {

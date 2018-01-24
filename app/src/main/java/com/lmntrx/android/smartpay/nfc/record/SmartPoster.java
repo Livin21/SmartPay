@@ -1,4 +1,4 @@
-package com.lmntrx.android.smartpay.record;
+package com.lmntrx.android.smartpay.nfc.record;
 
 /**
  * Created by ACJLionsRoar on 20/03/17.
@@ -22,7 +22,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.lmntrx.android.smartpay.NdefMessageParser;
+import com.lmntrx.android.smartpay.nfc.NdefMessageParser;
 import com.lmntrx.android.smartpay.R;
 
 /**
@@ -48,34 +48,29 @@ public class SmartPoster implements ParsedNdefRecord {
      */
     private final UriRecord mUriRecord;
 
-    /**
-     * NFC Forum Smart Poster Record Type Definition section 3.2.1.
-     *
-     * "The Action record. This record describes how the service should be
-     * treated. For example, the action may indicate that the device should save
-     * the URI as a bookmark or open a browser. The Action record is optional.
-     * If it does not exist, the device may decide what to do with the service.
-     * If the action record exists, it should be treated as a strong suggestion;
-     * the UI designer may ignore it, but doing so will induce a different user
-     * experience from device to device."
-     */
-    private final RecommendedAction mAction;
-
-    /**
-     * NFC Forum Smart Poster Record Type Definition section 3.2.1.
-     *
-     * "The Type record. If the URI references an external entity (e.g., via a
-     * URL), the Type record may be used to declare the MIME type of the entity.
-     * This can be used to tell the mobile device what kind of an object it can
-     * expect before it opens the connection. The Type record is optional."
-     */
-    private final String mType;
-
     private SmartPoster(UriRecord uri, TextRecord title, RecommendedAction action, String type) {
         mUriRecord = Preconditions.checkNotNull(uri);
         mTitleRecord = title;
-        mAction = Preconditions.checkNotNull(action);
-        mType = type;
+        /*
+      NFC Forum Smart Poster Record Type Definition section 3.2.1.
+
+      "The Action record. This record describes how the service should be
+      treated. For example, the action may indicate that the device should save
+      the URI as a bookmark or open a browser. The Action record is optional.
+      If it does not exist, the device may decide what to do with the service.
+      If the action record exists, it should be treated as a strong suggestion;
+      the UI designer may ignore it, but doing so will induce a different user
+      experience from device to device."
+     */
+        RecommendedAction mAction = Preconditions.checkNotNull(action);
+        /*
+      NFC Forum Smart Poster Record Type Definition section 3.2.1.
+
+      "The Type record. If the URI references an external entity (e.g., via a
+      URL), the Type record may be used to declare the MIME type of the entity.
+      This can be used to tell the mobile device what kind of an object it can
+      expect before it opens the connection. The Type record is optional."
+     */
     }
 
     public UriRecord getUriRecord() {
@@ -100,7 +95,7 @@ public class SmartPoster implements ParsedNdefRecord {
         }
     }
 
-    public static SmartPoster parse(NdefRecord[] recordsRaw) {
+    private static SmartPoster parse(NdefRecord[] recordsRaw) {
         try {
             List<ParsedNdefRecord> records = NdefMessageParser.getRecords(recordsRaw);
             UriRecord uri = Iterables.getOnlyElement(Iterables.filter(records, UriRecord.class));

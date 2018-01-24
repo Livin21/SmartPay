@@ -1,7 +1,8 @@
-package com.lmntrx.android.smartpay;
+package com.lmntrx.android.smartpay.nfc;
 
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -32,6 +33,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.lmntrx.android.smartpay.R;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,9 +48,6 @@ import static java.lang.String.valueOf;
  * Activity to write NFC tags with own mimetype and ID
  */
 public class NFCWriter extends AppCompatActivity {
-
-
-
 
     boolean mWriteMode = false;
     private NfcAdapter mNfcAdapter;
@@ -67,6 +66,7 @@ public class NFCWriter extends AppCompatActivity {
     private Boolean uploadMode = true;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +152,7 @@ public class NFCWriter extends AppCompatActivity {
                 Toast.makeText(NFCWriter.this, "Upload Failed!", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 //dismissProgressDialog();
@@ -168,6 +169,7 @@ public class NFCWriter extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void writeToTag(Intent intent){
         if (mWriteMode && NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
