@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard.record;
+package com.lmntrx.android.smartpay.record;
 
 /**
  * Created by ACJLionsRoar on 20/03/17.
@@ -8,7 +8,6 @@ package com.miniproject.nfcnoticeboard.record;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import com.miniproject.nfcnoticeboard.R;
 import android.app.Activity;
 import android.net.Uri;
 import android.nfc.NdefRecord;
@@ -22,6 +21,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.primitives.Bytes;
+import com.lmntrx.android.smartpay.R;
 
 /**
  * A parsed record containing a Uri.

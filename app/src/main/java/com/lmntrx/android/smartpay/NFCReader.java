@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard;
+package com.lmntrx.android.smartpay;
 
         import java.io.File;
         import java.io.IOException;
@@ -15,18 +15,13 @@ package com.miniproject.nfcnoticeboard;
         import com.google.firebase.storage.FileDownloadTask;
         import com.google.firebase.storage.FirebaseStorage;
         import com.google.firebase.storage.StorageReference;
-        import com.miniproject.nfcnoticeboard.record.ParsedNdefRecord;
-        import com.miniproject.nfcnoticeboard.record.TextRecord;
+        import com.lmntrx.android.smartpay.record.ParsedNdefRecord;
 
         import android.app.Activity;
         import android.app.AlertDialog;
         import android.app.PendingIntent;
-        import android.content.ClipData;
-        import android.content.ClipboardManager;
         import android.content.DialogInterface;
         import android.content.Intent;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
         import android.net.Uri;
         import android.nfc.NdefMessage;
         import android.nfc.NdefRecord;
@@ -36,14 +31,12 @@ package com.miniproject.nfcnoticeboard;
         import android.nfc.tech.MifareUltralight;
         import android.nfc.tech.NfcA;
         import android.os.Bundle;
-        import android.os.Environment;
         import android.os.IBinder;
         import android.os.Parcel;
         import android.os.Parcelable;
         import android.provider.Settings;
         import android.support.annotation.NonNull;
         import android.support.v7.app.AppCompatActivity;
-        import android.view.Gravity;
         import android.view.LayoutInflater;
         import android.view.Menu;
         import android.view.MenuItem;
@@ -453,7 +446,7 @@ public class NFCReader extends AppCompatActivity {
 
 
 
-            content.addView(inflater.inflate(R.layout.tag_divider, content, false), 6 + i);
+            content.addView(inflater.inflate(R.layout.tag_divider, content, false), 3 + i);
 
 
 

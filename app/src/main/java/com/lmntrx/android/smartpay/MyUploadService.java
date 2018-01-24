@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard;
+package com.lmntrx.android.smartpay;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,7 +15,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 /**
  * Service to handle uploading files to Firebase Storage.
  */

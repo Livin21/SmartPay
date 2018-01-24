@@ -42,7 +42,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Write to NFC Tag" />
+        android:text="Upload" />
 
     <TextView
         android:layout_width="wrap_content"

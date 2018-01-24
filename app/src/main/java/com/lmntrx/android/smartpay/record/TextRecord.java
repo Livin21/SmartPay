@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard.record;
+package com.lmntrx.android.smartpay.record;
 
 /**
  * Created by ACJLionsRoar on 20/03/17.
@@ -7,7 +7,6 @@ package com.miniproject.nfcnoticeboard.record;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import com.miniproject.nfcnoticeboard.R;
 import android.app.Activity;
 import android.nfc.NdefRecord;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.common.base.Preconditions;
+import com.lmntrx.android.smartpay.R;
 
 /**
  * An NFC Text Record

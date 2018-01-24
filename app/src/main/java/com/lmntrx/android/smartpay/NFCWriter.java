@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard;
+package com.lmntrx.android.smartpay;
 
 
 
@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,12 +62,18 @@ public class NFCWriter extends AppCompatActivity {
 
     String NoticeIDPath;
 
+    private Button uploadButton;
+
+    private Boolean uploadMode = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcwriter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        uploadButton = findViewById(R.id.button);
 
         mDialog = new AlertDialog.Builder(this).setNeutralButton("Ok", null).create();
 
@@ -90,29 +97,34 @@ public class NFCWriter extends AppCompatActivity {
 
         NoticeIDPath="Notice_"+valueOf(NoticeID);
 
-        findViewById(R.id.button).setOnClickListener(new OnClickListener() {
+        uploadButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                mNfcAdapter = NfcAdapter.getDefaultAdapter(NFCWriter.this);
-                mNfcPendingIntent = PendingIntent.getActivity(NFCWriter.this, 0,
-                        new Intent(NFCWriter.this, NFCWriter.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                if (!uploadMode){
+                    mNfcAdapter = NfcAdapter.getDefaultAdapter(NFCWriter.this);
+                    mNfcPendingIntent = PendingIntent.getActivity(NFCWriter.this, 0,
+                            new Intent(NFCWriter.this, NFCWriter.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-                enableTagWriteMode();
+                    enableTagWriteMode();
 
-                new AlertDialog.Builder(NFCWriter.this).setTitle("Touch tag to write")
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                disableTagWriteMode();
-                            }
+                    new AlertDialog.Builder(NFCWriter.this).setTitle("Touch tag to write")
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    disableTagWriteMode();
+                                }
 
-                        }).create().show();
+                            }).create().show();
+                }else {
+                    uploadText();
+                }
+                uploadMode = !uploadMode;
             }
         });
     }
 
-    private void uploadText(final Intent intent){
+    private void uploadText(){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
 
@@ -148,38 +160,42 @@ public class NFCWriter extends AppCompatActivity {
                 txtView.setVisibility(View.VISIBLE);
                 txtView.setText("Notice Uploaded.");
 
+                uploadButton.setText("Write to tag");
 
-                if (mWriteMode && NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-                    Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                    NdefRecord record = NdefRecord.createMime( ((TextView)findViewById(R.id.mime)).getText().toString(), ((TextView)findViewById(R.id.value)).getText().toString().getBytes());
-                    NdefMessage message = new NdefMessage(new NdefRecord[] { record });
-                    if (writeTag(message, detectedTag)) {
-                        Toast.makeText(NFCWriter.this, "SUCCESSFUL! Wrote ID to Tag", Toast.LENGTH_LONG)
-                                .show();
-
-                        TextView txtView2 = findViewById(R.id.tagWritten);
-                        txtView2.setVisibility(View.VISIBLE);
-                        txtView2.setText("Tag Write Successful");
-
-                        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        int NoticeID=pref.getInt("NoticeID", 0);
-                        NoticeID++;
-
-                        editor.putInt("NoticeID", NoticeID);
-                        editor.apply();
-                    }
-
-                    else
-                    {
-                        Toast.makeText(NFCWriter.this, "---DID NOT WRITE---", Toast.LENGTH_LONG)
-                                .show();
-                    }
-                }
 
             }
         });
 
+    }
+
+    private void writeToTag(Intent intent){
+        if (mWriteMode && NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+            Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            NdefRecord record = NdefRecord.createMime( ((TextView)findViewById(R.id.mime)).getText().toString(), ((TextView)findViewById(R.id.value)).getText().toString().getBytes());
+            NdefMessage message = new NdefMessage(new NdefRecord[] { record });
+            if (writeTag(message, detectedTag)) {
+                Toast.makeText(NFCWriter.this, "SUCCESSFUL! Wrote ID to Tag", Toast.LENGTH_LONG)
+                        .show();
+
+                TextView txtView2 = findViewById(R.id.tagWritten);
+                txtView2.setVisibility(View.VISIBLE);
+                txtView2.setText("Tag Write Successful");
+
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                int NoticeID=pref.getInt("NoticeID", 0);
+                NoticeID++;
+
+                editor.putInt("NoticeID", NoticeID);
+                editor.apply();
+            }
+
+            else
+            {
+                Toast.makeText(NFCWriter.this, "---DID NOT WRITE---", Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
     }
 
 
@@ -212,7 +228,7 @@ public class NFCWriter extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         // Tag writing mode
-        uploadText(intent);
+        writeToTag(intent);
     }
 
     /*

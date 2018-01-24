@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.miniproject.nfcnoticeboard">
+    package="com.lmntrx.android.smartpay">
 
     <uses-permission android:name="android.permission.NFC" />
 
@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" >
+        <activity android:name="com.lmntrx.android.smartpay.MainActivity" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NFCWriter" />
-        <activity android:name=".NFCReader" />
-        <activity android:name=".Authentication">
+        <activity android:name="com.lmntrx.android.smartpay.NFCWriter" />
+        <activity android:name="com.lmntrx.android.smartpay.NFCReader" />
+        <activity android:name="com.lmntrx.android.smartpay.Authentication">
         </activity>
 
     </application>

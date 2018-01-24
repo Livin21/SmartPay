@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.miniproject.nfcnoticeboard"
+        applicationId "com.lmntrx.android.smartpay"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
@@ -30,9 +30,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
     implementation files('/home/livin/Desktop/MainProjects/Jerald/NFC-Notice-Board/libs/guavalib.jar')
 }
-
-
-
-
-
 apply plugin: 'com.google.gms.google-services'

@@ -1,13 +1,5 @@
-package com.miniproject.nfcnoticeboard;
+package com.lmntrx.android.smartpay;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.miniproject.nfcnoticeboard.record.ParsedNdefRecord;
-import com.miniproject.nfcnoticeboard.record.SmartPoster;
-import com.miniproject.nfcnoticeboard.record.TextRecord;
-import com.miniproject.nfcnoticeboard.record.UriRecord;
 import android.app.Activity;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -15,6 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.lmntrx.android.smartpay.record.ParsedNdefRecord;
+import com.lmntrx.android.smartpay.record.SmartPoster;
+import com.lmntrx.android.smartpay.record.TextRecord;
+import com.lmntrx.android.smartpay.record.UriRecord;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NdefMessageParser {

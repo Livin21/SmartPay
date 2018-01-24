@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard;
+package com.lmntrx.android.smartpay;
 
 
 

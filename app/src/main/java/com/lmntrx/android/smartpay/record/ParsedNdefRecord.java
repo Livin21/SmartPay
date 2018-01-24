@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard.record;
+package com.lmntrx.android.smartpay.record;
 
 
 import android.app.Activity;

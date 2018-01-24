@@ -1,4 +1,4 @@
-package com.miniproject.nfcnoticeboard;
+package com.lmntrx.android.smartpay;
 
 import android.content.Intent;
 import android.content.IntentFilter;

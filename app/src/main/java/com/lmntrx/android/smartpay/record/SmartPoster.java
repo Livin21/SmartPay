@@ -1,14 +1,13 @@
-package com.miniproject.nfcnoticeboard.record;
+package com.lmntrx.android.smartpay.record;
 
 /**
  * Created by ACJLionsRoar on 20/03/17.
  */
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.miniproject.nfcnoticeboard.NdefMessageParser;
-import com.miniproject.nfcnoticeboard.R;
 import android.app.Activity;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
@@ -23,6 +22,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.lmntrx.android.smartpay.NdefMessageParser;
+import com.lmntrx.android.smartpay.R;
 
 /**
  * A representation of an NFC Forum "Smart Poster".
@@ -101,7 +102,7 @@ public class SmartPoster implements ParsedNdefRecord {
 
     public static SmartPoster parse(NdefRecord[] recordsRaw) {
         try {
-            Iterable<ParsedNdefRecord> records = NdefMessageParser.getRecords(recordsRaw);
+            List<ParsedNdefRecord> records = NdefMessageParser.getRecords(recordsRaw);
             UriRecord uri = Iterables.getOnlyElement(Iterables.filter(records, UriRecord.class));
             TextRecord title = getFirstIfExists(records, TextRecord.class);
             RecommendedAction action = parseRecommendedAction(recordsRaw);
